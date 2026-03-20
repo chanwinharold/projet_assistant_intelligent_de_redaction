@@ -18,7 +18,7 @@
       // Appel au modèle IA externe pour générer un résumé
       const summary = await summarizeContent(content);
       // Sauvegarde dans la BDD
-      const result = await db.query(
+      const result = await database.query(
         "INSERT INTO Articles (title, content, summary) VALUES (?, ?, ?)",
         [title, content, summary]
       );
