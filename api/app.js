@@ -1,7 +1,9 @@
 const express = require("express")
 const cors = require("cors")
+const cookieParser = require("cookie-parser")
 
 const app = express()
+const userRoutes = require("./routes/user.route")
 const corsOptions = {
     origin: `http://localhost/${process.env.PORT}`,
     method: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -10,7 +12,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 app.use(express.json())
+app.use(cookieParser())
 
+app.use("/auth", userRoutes);
 app.use((req, res) => {
     res.status(404).json({message : "Route Introuvable !"})
 })
