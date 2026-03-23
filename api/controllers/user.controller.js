@@ -90,3 +90,8 @@ exports.verifyEmail = (req, res, _) => {
         }).catch(error => res.status(500).json({error: `Erreur lors de la confirmation : ${error}.`}))
     }).catch(error => res.status(500).json({error: `Erreur lors de la vérification : ${error}.`}))
 }
+
+exports.uploadImage = (req, res, _) => {
+    if (!req.file) return res.status(200).json(null)
+    res.status(200).json(req.file.filename)
+}
