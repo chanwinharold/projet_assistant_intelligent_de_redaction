@@ -1,7 +1,44 @@
-import { Link } from 'react-router-dom';
-import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { apiRequest } from '../services/api';
 
 const Login = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      // Le contrôleur attend du JSON avec 'username' et 'password'
+      const response = await apiRequest('/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      // Le backend renvoie { message: "Connexion réussie." } et un cookie
+      console.log(response.message);
+      
+      // Redirection vers l'accueil
+      navigate('/');
+      
+    } catch (err) {
+      // Affiche "Votre nom d'utilisateur/mot de passe est incorrecte." ou erreur serveur
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-card">
@@ -11,25 +48,61 @@ const Login = () => {
           </Link>
           <h1 className="auth-title">SE CONNECTER</h1>
         </div>
+
+        {error && <div className="error-message">{error}</div>}
         
-        <div className="form-group">
-          <label>Nom d'utilisateur</label>
-          <input type="text" spellCheck="false" />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Nom d'utilisateur</label>
+            <input 
+              type="text" 
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
 
-        <div className="form-group">
-          <label>Mot de passe</label>
-          <input type="password" />
-        </div>
+          <div className="form-group">
+            <label>Mot de passe</label>
+            <input 
+              type="password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-        <button className="auth-submit-btn">Se connecter</button>
+          <button 
+            type="submit" 
+            className="auth-submit-btn" 
+            disabled={loading}
+          >
+            {loading ? 'Connexion...' : 'Se connecter'}
+          </button>
+        </form>
 
         <p className="switch-auth">
           Pas encore de compte ? <Link to="/register">S'inscrire</Link>
         </p>
       </div>
-
+    
       <style jsx>{`
+        .error-message {
+          background-color: #fee2e2;
+          color: #dc2626;
+          padding: 10px;
+          border-radius: 8px;
+          margin-bottom: 20px;
+          font-size: 0.9rem;
+          border: 1px solid #fecaca;
+        }
+
+        .auth-submit-btn:disabled {
+          background-color: #93c5fd;
+          cursor: not-allowed;
+        }
+
+        
         .auth-container {
           min-height: 100vh;
           width: 100%;
@@ -40,9 +113,7 @@ const Login = () => {
           font-family: 'Inter', sans-serif;
           padding: 20px;
           box-sizing: border-box;
-          overflow: hidden !important;
         }
-
         .auth-card {
           width: 100%;
           max-width: 450px;
@@ -53,7 +124,6 @@ const Login = () => {
           box-sizing: border-box;
           background: white;
         }
-
         .auth-header {
           display: flex;
           align-items: center;
@@ -61,53 +131,33 @@ const Login = () => {
           gap: 15px;
           margin-bottom: 40px;
         }
-
         .logo-img {
           width: 45px;
           height: 45px;
-          object-fit: contain;
-          cursor: pointer;
-          transition: transform 0.2s;
           border-radius: 50%;
         }
-
-        .logo-img:hover {
-          transform: scale(1.1);
-        }
-
         .auth-title {
           font-size: 1.8rem;
           font-weight: 800;
-          margin: 0;
-          letter-spacing: 0.5px;
           text-transform: uppercase;
         }
-
         .form-group {
           text-align: left;
           margin-bottom: 20px;
         }
-
         .form-group label {
           display: block;
-          font-size: 1rem;
           font-weight: 500;
           margin-bottom: 8px;
-          margin-left: 5px;
-          color: #000;
         }
-
         .form-group input {
           width: 100%;
           height: 48px;
           padding: 0 15px;
           border: 1px solid #000;
           border-radius: 12px;
-          font-size: 1rem;
-          outline: none;
           box-sizing: border-box;
         }
-
         .auth-submit-btn {
           width: 100%;
           height: 55px;
@@ -119,38 +169,11 @@ const Login = () => {
           font-weight: 600;
           margin: 30px 0 20px;
           cursor: pointer;
-          transition: background-color 0.2s;
         }
-
-        .auth-submit-btn:hover { 
-          background-color: #3d5ee0; 
-        }
-
-        .switch-auth {
-          margin-top: 10px;
-          font-size: 0.95rem;
-          color: #666;
-        }
-
         .switch-auth a {
           color: #4f75ff;
           text-decoration: none;
           font-weight: 600;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 480px) {
-          .auth-card {
-            border: none; 
-            padding: 20px 10px;
-          }
-          .auth-title {
-            font-size: 1.5rem;
-          }
-          .logo-img {
-            width: 35px;
-            height: 35px;
-          }
         }
       `}</style>
     </div>

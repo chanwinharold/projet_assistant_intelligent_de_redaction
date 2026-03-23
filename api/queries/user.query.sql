@@ -6,4 +6,4 @@ CREATE TABLE IR_USER (
     user_image VARCHAR(255) DEFAULT 'user_default_image.png'
 );
 
-DROP TABLE IR_USER;
+---DROP TABLE IR_USER;

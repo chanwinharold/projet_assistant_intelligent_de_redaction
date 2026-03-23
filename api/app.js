@@ -5,7 +5,8 @@ const cookieParser = require("cookie-parser")
 const app = express()
 const userRoutes = require("./routes/user.route")
 const corsOptions = {
-    origin: `http://localhost/${process.env.PORT}`,
+    // ICI, on met l'URL du FRONTEND
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
     method: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }

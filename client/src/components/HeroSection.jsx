@@ -57,7 +57,7 @@ const HeroSection = () => {
 
         .hero-title {
           font-family: 'Inter', 'Arial Black', sans-serif;
-          font-size: 4.5rem; /* Taille imposante comme sur l'image */
+          font-size: 4.5rem; 
           font-weight: 900;
           line-height: 0.95;
           letter-spacing: -3px; /* Très serré pour l'effet compact */

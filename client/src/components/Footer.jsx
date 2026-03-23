@@ -35,7 +35,7 @@ const Footer = () => {
       </div>
 
       <style jsx>{`
-        /* Import d'une police cursive pour l'effet gothique/élégant */
+        /* Import d'une police cursive pour l'effet gothique */
         @import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
 
         .footer-container {
