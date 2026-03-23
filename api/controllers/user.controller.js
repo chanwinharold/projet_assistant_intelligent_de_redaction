@@ -33,7 +33,7 @@ exports.login = (req, res, _) => {
                 if (!result) return res.status(401).json({message: "Votre nom d'utilisateur/mot de passe est incorrecte."});
                 const token = jwt.sign(
                     {id_user: response.id_user},
-                    process.env.JWT_TOKEN,
+                    process.env.JWT_USER_AUTH_TOKEN,
                     {expiresIn: '24h'}
                 )
                 res.cookie(
