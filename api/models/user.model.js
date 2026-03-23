@@ -19,3 +19,26 @@ exports.getUser = async (username) => {
         WHERE user_name = ${username}
     `;
 }
+
+exports.createEmailToken = async (token_dt) => {
+    return db`
+        INSERT INTO ir_email_token (token, expires)
+        VALUES (${token_dt.tokens}, ${token_dt.expires})
+    `;
+}
+
+exports.getEmailToken = async (token) => {
+    return db`
+        SELECT *
+        FROM ir_email_token
+        WHERE token = ${token}
+    `;
+}
+
+exports.updateEmailToVerified = async (email) => {
+    return db`
+        UPDATE IR_USER
+        SET user_verified = true
+        WHERE user_email = ${email}
+    `;
+}

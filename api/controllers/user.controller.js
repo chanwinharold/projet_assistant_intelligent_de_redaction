@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt")
+const crypto = require("crypto")
 const jwt = require("jsonwebtoken")
-const {createUser, getUser} = require("../models/user.model")
+const Nodemailer = require("nodemailer")
+const {createUser, getUser, createEmailToken, getEmailToken, updateEmailToVerified} = require("../models/user.model")
 
 exports.signup = (req, res, _) => {
     bcrypt.hash(
@@ -13,8 +15,41 @@ exports.signup = (req, res, _) => {
                 password: hash_pw,
                 email: req.body.email,
                 image: req.body.image
-            }).then(() => res.status(201).json({message: "Utilisateur crée."}))
-            .catch(error => {
+            }).then(async () => {
+
+                const emailTransporter= Nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 587,
+                    secure: false,
+                    auth: {
+                        user: process.env.AUTH_VERIFICATION_EMAIL,
+                        pass: process.env.AUTH_VERIFICATION_PASSWORD
+                    }
+                })
+                emailTransporter.verify((error, _) => {
+                    if (error) {
+                        console.error('Connexion SMTP échouée : ', error);
+                    } else {
+                        console.log('Serveur prêt à envoyer des emails');
+                    }
+                });
+
+                const token = crypto.randomBytes(32).toString('hex')
+                await createEmailToken({
+                    tokens: token,
+                    expires: Date.now() + 3600000
+                })
+
+                await emailTransporter.sendMail({
+                    from: process.env.AUTH_VERIFICATION_EMAIL,
+                    to: req.body.email,
+                    subject: "Confirmez votre adresse email",
+                    html: `<a href="${process.env.FRONTEND_URL}/verify?token=${token}">Confirmer mon email</a>`
+                })
+
+                res.status(201).json({message: "Utilisateur crée."})
+
+            }).catch(error => {
                 res.status(500).json({error: `Erreur lors de la création du compte : ${error}.`})
             })
         }
@@ -44,4 +79,14 @@ exports.login = (req, res, _) => {
             }
         )
     }).catch(error => res.status(500).json({error: `Erreur 01 lors de la connexion : ${error}.`}))
+}
+
+exports.verifyEmail = (req, res, _) => {
+    getEmailToken(req.query.token).then(response => {
+        response = response[0]
+        if (!response || response.expires < Date.now()) return res.status(400).json({error: "Lien invalide ou expiré."})
+        updateEmailToVerified().then(() => {
+            res.status(200).json({message: "Email confirmé."})
+        }).catch(error => res.status(500).json({error: `Erreur lors de la confirmation : ${error}.`}))
+    }).catch(error => res.status(500).json({error: `Erreur lors de la vérification : ${error}.`}))
 }

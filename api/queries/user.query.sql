@@ -1,3 +1,4 @@
+-- DROP TABLE IR_USER;
 CREATE TABLE IR_USER (
     id_user SERIAL PRIMARY KEY,
     user_name VARCHAR(20) NOT NULL UNIQUE,
@@ -5,4 +6,11 @@ CREATE TABLE IR_USER (
     user_password VARCHAR(255) NOT NULL UNIQUE,
     user_image VARCHAR(255) DEFAULT 'user_default_image.png',
     user_verified BOOLEAN NOT NULL DEFAULT false
+);
+
+-- DROP TABLE IR_EMAIL_TOKEN;
+CREATE TABLE IR_EMAIL_TOKEN (
+    id_token SERIAL PRIMARY KEY,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    expires TIMESTAMPTZ NOT NULL
 );
