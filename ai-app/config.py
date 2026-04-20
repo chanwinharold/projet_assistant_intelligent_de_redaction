@@ -15,7 +15,11 @@ PREPROCESSED_PROMPTS= {
         - Adapté au format [POST LINKEDIN / ARTICLE DE BLOG / NEWSLETTER] (choisis selon le contexte)
         - Maximum 12 mots par titre
         - Pas de titres génériques ou vagues 
-        - Pas d'explication, pas de commentaire : uniquement les 3 suggestions séparées par % et sans retour à la ligne, sans espaces blancs
+        - Pas d'explication, pas de commentaire : uniquement les 3 suggestions
+        - Retourne le résultat uniquement sous ce format JSON : 
+            {
+                "data": [...]
+            }
         Texte : 
         """,
     "autocomplete":
@@ -27,7 +31,11 @@ PREPROCESSED_PROMPTS= {
         - Respecte le ton, le style et la langue du texte fourni
         - Les suggestions peuvent être courtes (fin de phrase) ou longues (phrase complète, voire paragraphe) selon ce que le contexte appelle
         - Ne reformule pas le texte existant, commence directement la suite
-        - Pas d'explication, pas de commentaire : uniquement les 3 suggestions séparées par % et sans retour à la ligne, sans espaces blancs
+        - Pas d'explication, pas de commentaire : uniquement les 3 suggestions
+        - Retourne le résultat uniquement sous ce format JSON : 
+            {
+                "data": [...]
+            }
         Texte : 
         """,
     "rephrase":
@@ -39,6 +47,10 @@ PREPROCESSED_PROMPTS= {
         - Améliore la lisibilité, le flow et la clarté
         - Corrige les fautes éventuelles
         - Ne commente pas, ne justifie pas : retourne uniquement le texte amélioré
+        - Retourne le résultat uniquement sous ce format JSON : 
+            {
+                "data": "..."
+            }
         Texte :
         """,
     "resume":
@@ -50,6 +62,10 @@ PREPROCESSED_PROMPTS= {
         - Conserve le sens et les informations clés
         - Respecte la langue du texte fourni
         - Ne commente pas, ne justifie pas : retourne uniquement le résumé
+        - Retourne le résultat uniquement sous ce format JSON : 
+            {
+                "data": "..."
+            }
         Texte :  
         """
 }

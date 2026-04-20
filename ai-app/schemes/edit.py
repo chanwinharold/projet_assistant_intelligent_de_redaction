@@ -3,10 +3,10 @@ from pydantic import BaseModel
 
 
 class EditSuggestions(BaseModel):
-    response: List[str]
+    result: dict[str, List[str]]
     detail: str
 
 
 class EditSuggestion(BaseModel):
-    response: str
+    result: dict[str, str]
     detail: str

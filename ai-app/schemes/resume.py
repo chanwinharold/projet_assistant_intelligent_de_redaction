@@ -2,5 +2,5 @@ from pydantic import BaseModel
 
 
 class ResumeSuggestion(BaseModel):
-    response: str
+    result: dict[str, str]
     detail: str
