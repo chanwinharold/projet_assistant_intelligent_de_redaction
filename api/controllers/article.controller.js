@@ -8,7 +8,7 @@ exports.createArticle = (req, res) => {
 
     createArticle(article, id_user).then(
         () => res.status(201).json({message: "Article sauvegardé avec succès !"})
-    ).catch(err => res.status(500).json({error: `Erreur interne du serveur : ${err}`}))
+    ).catch(err => res.status(400).json({error: `Erreur: ${err}`}))
 };
 
 exports.getAllArticle = (req, res) => {
@@ -42,7 +42,7 @@ exports.updateArticle = (req, res) => {
 
     updateArticle(id_article, article, id_user).then(
         () => res.status(200).json({message: "Article mise à jour avec succès !"})
-    ).catch(err => res.status(400).json({error: `Erreur interne du serveur: ${err}`}))
+    ).catch(err => res.status(400).json({error: `Erreur: ${err}`}))
 };
 
 exports.deleteArticle = (req, res) => {
@@ -51,6 +51,6 @@ exports.deleteArticle = (req, res) => {
     const id_user = req.auth.id_user
 
     deleteArticle(id_article, id_user).then(
-        () => res.status(200).json({message: "Article supprimé avec succès !"})
-    ).catch(err => res.status(400).json({error: `Erreur interne du serveur: ${err}`}))
+        () => res.status(204).json({message: "Article supprimé avec succès !"})
+    ).catch(err => res.status(404).json({error: `Ressource Introuvable: ${err}`}))
 };
