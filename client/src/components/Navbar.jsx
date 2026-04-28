@@ -83,12 +83,12 @@ const Navbar = () => {
           justify-content: space-between;
           align-items: center;
           padding: 1rem 5%;
-          height: 80px;
+          height: 20px;
         }
 
         .logo-circle {
-          width: 55px;
-          height: 55px;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
           overflow: hidden;
           background: #f3f4f6;

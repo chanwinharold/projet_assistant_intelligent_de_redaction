@@ -132,8 +132,8 @@ const Login = () => {
           margin-bottom: 40px;
         }
         .logo-img {
-          width: 45px;
-          height: 45px;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
         }
         .auth-title {

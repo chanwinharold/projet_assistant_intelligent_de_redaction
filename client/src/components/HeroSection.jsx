@@ -8,7 +8,7 @@ const HeroSection = () => {
       <div className="hero-content">
         {/* TITRE AVEC OMBRE ET TYPO SERRÉE */}
         <h1 className="hero-title">
-          DES IDÉES PRÊTES À L'EMPLOI POUR ÉCRIRE PLUS VITE ET PLUS JUSTE. 
+          DES IDÉES PRÊTES À L'EMPLOI POUR ÉCRIRE <br/>PLUS VITE ET PLUS JUSTE.
         </h1>
 
         {/* DESCRIPTION AVEC ALIGNEMENT ET COULEUR EXACTE */}
@@ -56,15 +56,15 @@ const HeroSection = () => {
         }
 
         .hero-title {
-          font-family: 'Inter', 'Arial Black', sans-serif;
-          font-size: 4.5rem; 
+          font-family: var(--ff-title), sans-serif;
+          font-size: 5rem; 
           font-weight: 900;
           line-height: 0.95;
           letter-spacing: -3px; /* Très serré pour l'effet compact */
           color: #000;
           margin-bottom: 40px;
           /* Ombre portée douce pour détacher le texte */
-          text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); 
+          text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
           text-transform: uppercase;
         }
 

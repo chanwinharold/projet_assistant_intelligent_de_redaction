@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 async function start() {
     try {
         await db`SELECT 1`; // Test de connexion
-        console.log("✅ Base de données connectée");
+        console.log("✅  Base de données connectée");
 
         app.listen(PORT, () => {
             console.log(`🚀 Serveur démarré sur le port ${PORT}`);
