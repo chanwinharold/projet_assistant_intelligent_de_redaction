@@ -10,7 +10,7 @@ async function start() {
         console.log("✅  Base de données connectée");
 
         app.listen(PORT, () => {
-            console.log(`🚀 Serveur démarré sur le port ${PORT}`);
+            console.log(`🚀 Serveur démarré sur le port http://localhost:${PORT}`);
         });
     } catch (error) {
         console.error("❌ Impossible de se connecter à la base :", error.message);

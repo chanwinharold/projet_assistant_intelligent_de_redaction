@@ -74,7 +74,11 @@ exports.login = (req, res, _) => {
                 res.cookie(
                     "authToken",
                     token,
-                    {httpOnly: true}
+                    {
+                        httpOnly: true,
+                        sameSite: "none",  // ← obligatoire pour cross-origin
+                        secure: true,      // ← obligatoire avec sameSite: "none"
+                    }
                 ).status(200).json({message: "Connexion réussie."})
             }
         )

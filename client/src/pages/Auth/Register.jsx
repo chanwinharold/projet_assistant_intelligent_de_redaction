@@ -1,8 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Upload } from 'lucide-react';
-import { apiRequest } from '../services/api';
+import { apiRequest } from '../../services/api.js';
 import { CheckCircle2 } from 'lucide-react';
+import "../../styles/Register.css";
 
 
 const Register = () => {
@@ -50,6 +51,7 @@ const handleSubmit = async (e) => {
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: "include",
       body: JSON.stringify(payload),
     });
 
@@ -153,120 +155,6 @@ const handleSubmit = async (e) => {
           Déjà un compte ? <Link to="/login">Se connecter</Link>
         </p>
       </div>
-
-      <style>{`
-        /* Styles identiques au Login pour la cohérence */
-        .error-message {
-          background-color: #fee2e2;
-          color: #dc2626;
-          padding: 10px;
-          border-radius: 8px;
-          margin-bottom: 15px;
-          font-size: 0.9rem;
-          border: 1px solid #fecaca;
-        }
-
-        .auth-container {
-          min-height: 100vh;
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background-color: #fff;
-          font-family: 'Inter', sans-serif;
-          padding: 20px;
-          box-sizing: border-box;
-        }
-
-        .auth-card {
-          width: 100%;
-          max-width: 480px;
-          padding: 30px 35px;
-          border: 1.5px solid #000;
-          border-radius: 40px;
-          text-align: center;
-          background: white;
-        }
-
-        .auth-header {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 15px;
-          margin-bottom: 25px;
-        }
-
-        .logo-img {
-          width: 45px;
-          height: 45px;
-          border-radius: 50%;
-        }
-
-        .auth-title {
-          font-size: 1.8rem;
-          font-weight: 800;
-          text-transform: uppercase;
-        }
-
-        .form-group {
-          text-align: left;
-          margin-bottom: 15px;
-        }
-
-        .form-group label {
-          display: block;
-          font-weight: 500;
-          margin-bottom: 5px;
-          margin-left: 5px;
-        }
-
-        .form-group input {
-          width: 100%;
-          height: 42px;
-          padding: 0 15px;
-          border: 1px solid #000;
-          border-radius: 12px;
-          box-sizing: border-box;
-          outline: none;
-        }
-
-        .upload-row {
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
-          gap: 12px;
-          margin: 15px 0;
-          font-weight: 500;
-        }
-
-        .upload-button { cursor: pointer; display: flex; align-items: center; }
-        .upload-button:hover { color: #4f75ff; }
-
-        .auth-submit-btn {
-          width: 100%;
-          height: 50px;
-          background-color: #4f75ff;
-          color: white;
-          border: none;
-          border-radius: 30px;
-          font-size: 1.1rem;
-          font-weight: 600;
-          cursor: pointer;
-          margin-bottom: 15px;
-        }
-
-        .auth-submit-btn:disabled { background-color: #ccc; }
-
-        .switch-auth a {
-          color: #4f75ff;
-          text-decoration: none;
-          font-weight: 600;
-        }
-
-        @media (max-width: 480px) {
-          .auth-card { padding: 20px; border-radius: 25px; border: none; }
-        }
-      `}</style>
     </div>
   );
 };

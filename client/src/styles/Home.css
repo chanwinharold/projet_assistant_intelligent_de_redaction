@@ -1,0 +1,180 @@
+
+/***************************************************************************/
+/************************** HERO SECTION STYLE *****************************/
+/***************************************************************************/
+.hero-container {
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 1000px;
+    width: 100%;
+}
+
+.hero-title {
+    font-family: var(--ff-title), sans-serif;
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -3px; /* Très serré pour l'effet compact */
+    color: #000;
+    margin-bottom: 40px;
+    /* Ombre portée douce pour détacher le texte */
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+}
+
+.hero-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.25rem;
+    color: #1a1a1a;
+    line-height: 1.4;
+    margin-bottom: 50px;
+    font-weight: 500;
+}
+
+.hero-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    background-color: #fff;
+    border: 3px solid #000;
+    border-radius: 100px; /* Forme pilule parfaite */
+    padding: 10px 15px 10px 35px; /* Padding asymétrique pour l'icône */
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.hero-button span {
+    font-size: 1.2rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.arrow-circle {
+    background-color: #fff;
+    border: 3px solid #000;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.arrow-circle svg {
+    width: 24px;
+    height: 24px;
+    color: #000;
+}
+
+/* EFFETS AU SURVOL */
+.hero-button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.hero-button:hover .arrow-circle {
+    transform: translateX(5px);
+    background-color: #000;
+}
+
+.hero-button:hover .arrow-circle svg {
+    color: #fff;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+        letter-spacing: -1px;
+    }
+    .hero-description {
+        font-size: 1rem;
+    }
+}
+
+/***************************************************************************/
+/************************** DETAIL SECTION STYLE ***************************/
+/***************************************************************************/
+
+.details-container {
+    padding: 80px 10%;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    margin-bottom: 100px;
+}
+
+.detail-row.reverse {
+    flex-direction: row-reverse;
+}
+
+.detail-image, .detail-text {
+    flex: 1;
+}
+
+.detail-image img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    display: block;
+}
+
+.detail-text h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: #000;
+    line-height: 1.2;
+}
+
+.detail-text p {
+    font-size: 1.15rem;
+    color: #4b5563;
+    line-height: 1.7;
+}
+
+/* --- RESPONSIVE TABLETTE & MOBILE --- */
+@media (max-width: 1024px) {
+    .details-container {
+        padding: 60px 5%;
+    }
+    .detail-row {
+        gap: 40px;
+    }
+    .detail-text h2 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .detail-row, .detail-row.reverse {
+        flex-direction: column; /* Empilage vertical */
+        margin-bottom: 80px;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .detail-text h2 {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+    }
+
+    .detail-text p {
+        font-size: 1.05rem;
+    }
+
+    .detail-image {
+        width: 100%;
+    }
+}

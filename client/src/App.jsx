@@ -1,44 +1,61 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { Outlet, createBrowserRouter, RouterProvider} from 'react-router-dom';
 import Navbar from './components/Navbar';
-import HeroSection from './components/HeroSection';
-import DetailSection from './components/DetailSection';
 import Footer from './components/Footer';
-import Login from './components/Login';
-import Register from './components/Register';
+import Login from './pages/Auth/Login.jsx';
+import Register from './pages/Auth/Register.jsx';
+import Write from "./pages/Write/Write.jsx";
+import Home from "./pages/Home/Home.jsx";
+import Resume from "./pages/Resume/Resume.jsx";
+import Save from "./pages/Save/Save.jsx";
 
 // Composant pour gérer l'affichage conditionnel
-const Layout = ({ children }) => {
-  const location = useLocation();
-  const authPaths = ['/login', '/register'];
-  const isAuthPage = authPaths.includes(location.pathname);
-
-  return (
-    <>
-      {!isAuthPage && <Navbar />}
-      {children}
-      {!isAuthPage && <Footer />}
-    </>
-  );
+const AppLayout = () => {
+    return (
+        <>
+            <Navbar />
+            <Outlet />
+            <Footer />
+        </>
+    );
 };
 
+let router = createBrowserRouter([
+    {
+        path: "/",
+        Component: AppLayout,
+        children: [
+            {
+                index: true,
+                Component: Home
+            },
+            {
+                path: "/write",
+                Component: Write
+            },
+            {
+                path: "/resume",
+                Component: Resume
+            },
+            {
+                path: "/save",
+                Component: Save
+            }
+        ]
+    },
+    {
+        path: "/login",
+        Component: Login
+    },
+    {
+        path: "/register",
+        Component: Register
+    }
+])
+
 function App() {
-  return (
-    <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={
-            <>
-              <HeroSection />
-              <DetailSection />
-            </>
-          } />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </Layout>
-    </BrowserRouter>
-  );
+    return (
+        <RouterProvider router={router} />
+    );
 }
 
 export default App;
