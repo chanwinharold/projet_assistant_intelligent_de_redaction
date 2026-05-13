@@ -37,7 +37,7 @@ exports.getEmailToken = async (token) => {
 
 exports.updateEmailToVerified = async (email) => {
     return db`
-        UPDATE IR_USER
+        UPDATE ir_user
         SET user_verified = true
         WHERE user_email = ${email}
     `;

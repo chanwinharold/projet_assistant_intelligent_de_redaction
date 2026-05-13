@@ -6,6 +6,7 @@ import DetailSection from './components/DetailSection';
 import Footer from './components/Footer';
 import Login from './components/Login';
 import Register from './components/Register';
+import Verify from "./components/Verify.jsx";
 
 // Composant pour gérer l'affichage conditionnel
 const Layout = ({ children }) => {
@@ -35,6 +36,7 @@ function App() {
           } />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify" element={<Verify />} />
         </Routes>
       </Layout>
     </BrowserRouter>

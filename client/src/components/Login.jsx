@@ -105,7 +105,8 @@ const Login = () => {
         
         .auth-container {
           min-height: 100vh;
-          width: 100%;
+          width: min(100%, 500px);
+          margin: auto;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -137,7 +138,7 @@ const Login = () => {
           border-radius: 50%;
         }
         .auth-title {
-          font-size: 1.8rem;
+          font-size: 1.5rem;
           font-weight: 800;
           text-transform: uppercase;
         }
@@ -152,7 +153,7 @@ const Login = () => {
         }
         .form-group input {
           width: 100%;
-          height: 48px;
+          height: 40px;
           padding: 0 15px;
           border: 1px solid #000;
           border-radius: 12px;

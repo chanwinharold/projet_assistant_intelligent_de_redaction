@@ -30,131 +30,131 @@ const Register = () => {
   };
 
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (formData.password !== formData.confirmPassword) return setError('Mots de passe différents');
-  
-  setLoading(true);
-  try {
-    // On envoie un objet JSON simple pour correspondre à req.body du controller
-    const payload = {
-      username: formData.username,
-      email: formData.email,
-      password: formData.password,
-      image: "" // Le controller attend 'image', on laisse vide en attendant multer
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) return setError('Mots de passe différents');
+
+    setLoading(true);
+    try {
+      // On envoie un objet JSON simple pour correspondre à req.body du controller
+      const payload = {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        image: image.name // Le controller attend 'image', on laisse vide en attendant multer
+      };
 
 
-    await apiRequest('/auth/signup', { // Le controller est lié à /signup et non /register
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload),
-    });
+      await apiRequest('/auth/signup', { // Le controller est lié à /signup et non /register
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload),
+      });
 
-    navigate('/login');
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+      navigate('/login');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <div className="auth-header">
-          <Link to="/" className="logo-link">
-            <img src="/images/logo.png" alt="Logo" className="logo-img" />
-          </Link>
-          <h1 className="auth-title">S'INSCRIRE</h1>
-        </div>
-
-        {error && <div className="error-message">{error}</div>}
-        
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Nom d'utilisateur</label>
-            <input 
-              type="text" 
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required 
-            />
+      <div className="auth-container">
+        <div className="auth-card">
+          <div className="auth-header">
+            <Link to="/" className="logo-link">
+              <img src="/images/logo.png" alt="Logo" className="logo-img" />
+            </Link>
+            <h1 className="auth-title">S'INSCRIRE</h1>
           </div>
 
-          <div className="form-group">
-            <label>Email d'utilisateur</label>
-            <input 
-              type="email" 
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required 
-            />
-          </div>
+          {error && <div className="error-message">{error}</div>}
 
-          <div className="form-group">
-            <label>Mot de passe</label>
-            <input 
-              type="password" 
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required 
-            />
-          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Nom d'utilisateur</label>
+              <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  required
+              />
+            </div>
 
-          <div className="form-group">
-            <label>Confirmer le mot de passe</label>
-            <input 
-              type="password" 
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required 
-            />
-          </div>
+            <div className="form-group">
+              <label>Email d'utilisateur</label>
+              <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+              />
+            </div>
 
-          <div className="upload-row">
-  <span style={{ 
-    display: 'flex', 
-    alignItems: 'center', 
+            <div className="form-group">
+              <label>Mot de passe</label>
+              <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Confirmer le mot de passe</label>
+              <input
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  required
+              />
+            </div>
+
+            <div className="upload-row">
+  <span style={{
+    display: 'flex',
+    alignItems: 'center',
     gap: '8px',
-    color: image ? '#4f75ff' : 'inherit' 
+    color: image ? '#4f75ff' : 'inherit'
   }}>
     {image ? (
-      <>
-        <CheckCircle2 size={18} /> Image sélectionnée
-      </>
+        <>
+          <CheckCircle2 size={18} /> Image sélectionnée
+        </>
     ) : (
-      "Charger une image"
+        "Charger une image"
     )}
   </span>
-  <label className="upload-button">
-    <Upload size={22} strokeWidth={2.5} />
-    <input 
-      type="file" 
-      accept="image/*"
-      style={{ display: 'none' }} 
-      onChange={handleImageChange}
-    />
-  </label>
-</div>
+              <label className="upload-button">
+                <Upload size={22} strokeWidth={2.5} />
+                <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleImageChange}
+                />
+              </label>
+            </div>
 
-          <button type="submit" className="auth-submit-btn" disabled={loading}>
-            {loading ? 'Inscription...' : "S'inscrire"}
-          </button>
-        </form>
-        
-        <p className="switch-auth">
-          Déjà un compte ? <Link to="/login">Se connecter</Link>
-        </p>
-      </div>
+            <button type="submit" className="auth-submit-btn" disabled={loading}>
+              {loading ? 'Inscription...' : "S'inscrire"}
+            </button>
+          </form>
 
-      <style>{`
+          <p className="switch-auth">
+            Déjà un compte ? <Link to="/login">Se connecter</Link>
+          </p>
+        </div>
+
+        <style>{`
         /* Styles identiques au Login pour la cohérence */
         .error-message {
           background-color: #fee2e2;
@@ -168,7 +168,8 @@ const handleSubmit = async (e) => {
 
         .auth-container {
           min-height: 100vh;
-          width: 100%;
+          width: min(100%, 500px);
+          margin: auto;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -197,13 +198,13 @@ const handleSubmit = async (e) => {
         }
 
         .logo-img {
-          width: 45px;
-          height: 45px;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
         }
 
         .auth-title {
-          font-size: 1.8rem;
+          font-size: 1.5rem;
           font-weight: 800;
           text-transform: uppercase;
         }
@@ -222,7 +223,7 @@ const handleSubmit = async (e) => {
 
         .form-group input {
           width: 100%;
-          height: 42px;
+          height: 40px;
           padding: 0 15px;
           border: 1px solid #000;
           border-radius: 12px;
@@ -267,7 +268,7 @@ const handleSubmit = async (e) => {
           .auth-card { padding: 20px; border-radius: 25px; border: none; }
         }
       `}</style>
-    </div>
+      </div>
   );
 };
 
