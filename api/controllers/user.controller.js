@@ -86,6 +86,7 @@ exports.login = (req, res, _) => {
 }
 
 exports.verifyEmail = (req, res, _) => {
+    console.log(req.query.token)
     getEmailToken(req.query.token).then(response => {
         response = response[0]
         if (!response || response.expires < Date.now()) return res.status(400).json({error: "Lien invalide ou expiré."})

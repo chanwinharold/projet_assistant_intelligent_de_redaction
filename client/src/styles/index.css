@@ -6,3 +6,7 @@
 
     font-family: var(--ff-regular), Inter, sans-serif !important;
 }
+
+#root {
+    min-height: 75vh;
+}
