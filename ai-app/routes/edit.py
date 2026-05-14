@@ -6,7 +6,7 @@ from schemes.edit import EditSuggestion, EditSuggestions
 import json
 
 
-router = APIRouter(prefix="/edit", tags=["Editor"])
+router = APIRouter(prefix="/edit", tags=["Resumer"])
 myai = AskAI(model_=MODEL_NAME, inference_provider_="together")
 
 
