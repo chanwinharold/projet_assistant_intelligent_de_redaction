@@ -39,7 +39,7 @@ const Navbar = () => {
                 <div className="auth-section-desktop">
                     {isLoggedIn ? (
                         <Link to={"/profil"} className="profile-circle">
-                            <img src={`/user_images/${user.image}`} alt="Profil" />
+                            <img src={`/user_images/${user.image}`} alt="Profil" title={user.username} />
                         </Link>
                     ) : (
                         <Link to="/login" className="login-btn">Se connecter</Link>

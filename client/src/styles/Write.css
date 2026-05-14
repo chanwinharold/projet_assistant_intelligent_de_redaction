@@ -1,0 +1,72 @@
+
+.main__container {
+    display: grid;
+    gap: 5rem;
+}
+
+.editor__header {
+    width: fit-content;
+    border: 2px solid black;
+    padding: 0.5rem 2rem;
+    margin-block: 0.25rem;
+}
+.editor__header h1,
+.editor__header h2 {
+    margin: 0; padding: 0;
+    font-size: 32px;
+    text-transform: uppercase;
+    font-family: var(--ff-title), sans-serif;
+    font-weight: 500;
+}
+
+
+.editor__main {
+    border: 2px solid black;
+    padding: 1.5rem;
+}
+.editor__main form {
+    display: grid;
+    gap: 2rem;
+}
+
+
+.editor__title {
+    display: grid;
+    grid-template-rows: min-content 40px;
+    grid-template-columns: 1.75fr max-content;
+    gap: 1rem;
+}
+.editor__title label {
+    grid-row: 1;
+}
+.editor__title input {
+    grid-row: 2;
+    padding-inline: 2rem;
+    border: 1px solid black;
+    border-radius: var(--radius-lg);
+}
+.editor__title button {
+    grid-row: 2;
+}
+
+
+.editor__article {
+    display: grid; gap: 1rem;
+    grid-template-columns: 1.75fr max-content;
+    grid-template-rows: min-content min-content;
+}
+.editor__article label {
+    grid-column: 1;
+}
+.editor__article textarea {
+    grid-column: 1;
+    padding: 2rem 1rem;
+    border: 1px solid black;
+    border-radius: var(--radius-lg);
+}
+.editor__article > div {
+    height: min-content;
+    grid-column: 2;
+    display: grid;
+    gap: 1rem;
+}
