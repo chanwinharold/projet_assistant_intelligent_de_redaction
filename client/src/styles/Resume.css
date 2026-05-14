@@ -27,3 +27,15 @@
     border: 1px solid black;
     border-radius: var(--radius-lg);
 }
+
+
+.resumer__grid {
+    display: grid;
+    gap: 3rem;
+}
+
+
+.btn__container {
+    display: flex;
+    gap: 1.5rem;
+}

@@ -1,3 +1,6 @@
+import {Safeguard} from "../../assets/icons/Safeguard.jsx";
+import {Copy} from "../../assets/icons/Copy.jsx";
+import {Delete} from "../../assets/icons/Delete.jsx";
 
 const GlimpseResumer = ({content}) => {
     return (
@@ -5,7 +8,7 @@ const GlimpseResumer = ({content}) => {
             <header className={"editor__header"}>
                 <h2>résumé</h2>
             </header>
-            <section className={"editor__main"}>
+            <section className={"editor__main resumer__grid"}>
                 <p>{content ? (
                     content
                 ):(`
@@ -18,6 +21,21 @@ const GlimpseResumer = ({content}) => {
                     saepe veniam voluptate. Facilis placeat quos reiciendis 
                     sed soluta? Accusamus hic illo in totam. 
                 `)}</p>
+
+                <div className={"btn__container"}>
+                    <button type={"submit"} className={"btn-primary"}>
+                        <Safeguard />
+                        <span>Sauvegarder</span>
+                    </button>
+                    <button type={"submit"} className={"btn-primary"}>
+                        <Copy />
+                        <span>Terminer et Copier</span>
+                    </button>
+                    <button type={"submit"} className={"btn-primary"}>
+                        <Delete />
+                        <span>Supprimer</span>
+                    </button>
+                </div>
             </section>
         </div>
     );
