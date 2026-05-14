@@ -8,13 +8,12 @@ const userRoutes = require("./routes/user.route")
 const articleRoutes = require("./routes/article.route")
 const resumeRoutes = require("./routes/resume.router")
 
-const corsOptions = {
+app.use(cors({
     origin: process.env.FRONTEND_URL || "http://localhost:5173",
-    method: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
-}
-
-app.use(cors(corsOptions))
+}));
 app.use(express.json())
 app.use(cookieParser())
 

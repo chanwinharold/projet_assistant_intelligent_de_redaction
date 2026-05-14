@@ -7,156 +7,148 @@ import "../../styles/Register.css";
 
 
 const Register = () => {
-  // États pour les champs du formulaire
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
-  const [image, setImage] = useState(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+    // États pour les champs du formulaire
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
+    const [image, setImage] = useState(null);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  // Gestion des changements dans les inputs texte
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    // Gestion des changements dans les inputs texte
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-  // Gestion du chargement de l'image
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
-  };
-
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (formData.password !== formData.confirmPassword) return setError('Mots de passe différents');
-  
-  setLoading(true);
-  try {
-    // On envoie un objet JSON simple pour correspondre à req.body du controller
-    const payload = {
-      username: formData.username,
-      email: formData.email,
-      password: formData.password,
-      image: "" // Le controller attend 'image', on laisse vide en attendant multer
+    // Gestion du chargement de l'image
+    const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
     };
 
 
-    await apiRequest('/auth/signup', { // Le controller est lié à /signup et non /register
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      credentials: "include",
-      body: JSON.stringify(payload),
-    });
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (formData.password !== formData.confirmPassword) return setError('Mots de passe différents');
 
-    navigate('/login');
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+        setLoading(true);
+        try {
+            // On envoie un objet JSON simple pour correspondre à req.body du controller
+            const payload = {
+                username: formData.username,
+                email: formData.email,
+                password: formData.password,
+                image: image
+            };
 
-  return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <div className="auth-header">
-          <Link to="/" className="logo-link">
-            <img src="/images/logo.png" alt="Logo" className="logo-img" />
-          </Link>
-          <h1 className="auth-title">S'INSCRIRE</h1>
+            await apiRequest('/auth/signup', { // Le controller est lié à /signup et non /register
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload),
+            });
+
+            navigate('/login');
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="auth-container">
+            <div className="auth-card">
+                <div className="auth-header">
+                    <Link to="/" className="logo-link">
+                        <img src="/images/logo.png" alt="Logo" className="logo-img" />
+                    </Link>
+                    <h1 className="auth-title">S'INSCRIRE</h1>
+                </div>
+
+                {error && <div className="error-message">{error}</div>}
+
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label>Nom d'utilisateur</label>
+                        <input
+                            type="text"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Email d'utilisateur</label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Mot de passe</label>
+                        <input
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Confirmer le mot de passe</label>
+                        <input
+                            type="password"
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="upload-row">
+                        <span style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '8px',
+                              color: image ? '#4f75ff' : 'inherit'
+                        }}>
+                            {image ? (
+                                <><CheckCircle2 size={18} /> Image sélectionnée</>
+                            ) : ("Charger une image")}
+                        </span>
+                        <label className="upload-button">
+                            <Upload size={22} strokeWidth={2.5} />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={handleImageChange}
+                            />
+                        </label>
+                    </div>
+
+                    <button type="submit" className="auth-submit-btn" disabled={loading}>
+                        {loading ? 'Inscription...' : "S'inscrire"}
+                    </button>
+                </form>
+
+                <p className="switch-auth">
+                    Déjà un compte ? <Link to="/login">Se connecter</Link>
+                </p>
+            </div>
         </div>
-
-        {error && <div className="error-message">{error}</div>}
-        
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Nom d'utilisateur</label>
-            <input 
-              type="text" 
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required 
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Email d'utilisateur</label>
-            <input 
-              type="email" 
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required 
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Mot de passe</label>
-            <input 
-              type="password" 
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required 
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Confirmer le mot de passe</label>
-            <input 
-              type="password" 
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required 
-            />
-          </div>
-
-          <div className="upload-row">
-  <span style={{ 
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '8px',
-    color: image ? '#4f75ff' : 'inherit' 
-  }}>
-    {image ? (
-      <>
-        <CheckCircle2 size={18} /> Image sélectionnée
-      </>
-    ) : (
-      "Charger une image"
-    )}
-  </span>
-  <label className="upload-button">
-    <Upload size={22} strokeWidth={2.5} />
-    <input 
-      type="file" 
-      accept="image/*"
-      style={{ display: 'none' }} 
-      onChange={handleImageChange}
-    />
-  </label>
-</div>
-
-          <button type="submit" className="auth-submit-btn" disabled={loading}>
-            {loading ? 'Inscription...' : "S'inscrire"}
-          </button>
-        </form>
-        
-        <p className="switch-auth">
-          Déjà un compte ? <Link to="/login">Se connecter</Link>
-        </p>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Register;

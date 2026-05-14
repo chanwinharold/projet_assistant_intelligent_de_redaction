@@ -12,7 +12,7 @@ const Navbar = () => {
         { name: 'Enregistrements', href: '/save' },
     ];
 
-    let isLoggedIn = true;
+    let isLoggedIn = false;
     return (
         <nav className="navbar-container">
             <div className="navbar-main">

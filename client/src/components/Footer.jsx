@@ -1,5 +1,7 @@
 import React from 'react';
-import { Github, Linkedin, Code, Mail, FileText } from 'lucide-react';
+import { Code, Mail, FileText } from 'lucide-react';
+import {Linkedin} from "../assets/icons/LinkedIn.jsx";
+import {Github} from "../assets/icons/GitHub.jsx";
 import "../styles/Footer.css";
 
 const Footer = () => {
