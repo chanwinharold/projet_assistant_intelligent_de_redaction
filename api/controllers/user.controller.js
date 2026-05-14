@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt")
 const crypto = require("crypto")
 const jwt = require("jsonwebtoken")
 const Nodemailer = require("nodemailer")
-const {createUser, getUser, createEmailToken, getEmailToken, updateEmailToVerified} = require("../models/user.model")
+const {createUser, getUser, createEmailToken, getEmailToken, updateEmailToVerified, getUserById} = require("../models/user.model")
 
 exports.signup = (req, res, _) => {
     bcrypt.hash(
@@ -75,14 +75,21 @@ exports.login = (req, res, _) => {
                     "authToken",
                     token,
                     { httpOnly: true }
-                ).status(200).json({message: "Connexion réussie."})
+                ).status(200).json({
+                    message: "Connexion réussie.",
+                    data: {
+                        username: response.user_name,
+                        email: response.user_email,
+                        image: response.user_image,
+                        isVerified: response.user_verified
+                    }
+                })
             }
         )
     }).catch(error => res.status(500).json({error: `Erreur 01 lors de la connexion : ${error}.`}))
 }
 
 exports.verifyEmail = (req, res, _) => {
-    console.log(req.query.token)
     getEmailToken(req.query.token).then(response => {
         response = response[0]
         if (!response || response.expires < Date.now()) return res.status(400).json({error: "Lien invalide ou expiré."})
@@ -94,5 +101,24 @@ exports.verifyEmail = (req, res, _) => {
 
 exports.uploadImage = (req, res, _) => {
     if (!req.file) return res.status(200).json(null)
-    res.status(200).json(req.file.filename)
+    res.status(200).send(req.file.filename)
 }
+
+exports.getAuthMe = async (req, res, _) => {
+    try {
+        const id_user = req.auth.id_user;
+        let user = await getUserById(id_user);
+        user = user[0];
+        if (!user) {
+            return res.status(404).json({ message: "Utilisateur introuvable" });
+        }
+        res.json({
+            username: user.user_name,
+            email: user.user_email,
+            image: user.user_image,
+            isVerified: user.user_verified
+        });
+    } catch (err) {
+        res.status(401).json({ message: "Token invalide" });
+    }
+};

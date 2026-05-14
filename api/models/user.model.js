@@ -14,9 +14,17 @@ exports.createUser = async (user_dt) => {
 
 exports.getUser = async (username) => {
     return db`
-        SELECT id_user, user_name, user_password
+        SELECT *
         FROM ir_user
         WHERE user_name = ${username}
+    `;
+}
+
+exports.getUserById = async (id_user) => {
+    return db`
+        SELECT user_name, user_email, user_image, user_verified
+        FROM ir_user
+        WHERE id_user = ${id_user}
     `;
 }
 

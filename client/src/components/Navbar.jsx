@@ -2,9 +2,11 @@ import { Link } from 'react-router-dom';
 import React, {useState} from 'react';
 import { Menu, X } from 'lucide-react';
 import "../styles/Navbar.css";
+import useAuth from "../hooks/useAuth.js";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const {user, isLoggedIn} = useAuth();
 
     const navLinks = [
         { name: 'Écrire', href: '/write' },
@@ -12,7 +14,6 @@ const Navbar = () => {
         { name: 'Enregistrements', href: '/save' },
     ];
 
-    let isLoggedIn = false;
     return (
         <nav className="navbar-container">
             <div className="navbar-main">
@@ -37,9 +38,9 @@ const Navbar = () => {
                 {/* AUTH / PROFIL GAUCHE */}
                 <div className="auth-section-desktop">
                     {isLoggedIn ? (
-                        <div className="profile-circle">
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hugues" alt="Profil" />
-                        </div>
+                        <Link to={"/profil"} className="profile-circle">
+                            <img src={`/user_images/${user.image}`} alt="Profil" />
+                        </Link>
                     ) : (
                         <Link to="/login" className="login-btn">Se connecter</Link>
                     )}

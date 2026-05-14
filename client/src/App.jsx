@@ -1,4 +1,5 @@
 import { Outlet, createBrowserRouter, RouterProvider} from 'react-router-dom';
+import "./styles/index.css";
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Login from './pages/Auth/Login.jsx';
@@ -7,6 +8,7 @@ import Write from "./pages/Write/Write.jsx";
 import Home from "./pages/Home/Home.jsx";
 import Resume from "./pages/Resume/Resume.jsx";
 import Save from "./pages/Save/Save.jsx";
+import Profil from "./pages/Profil/Profil.jsx";
 
 // Composant pour gérer l'affichage conditionnel
 const AppLayout = () => {
@@ -39,6 +41,10 @@ let router = createBrowserRouter([
             {
                 path: "/save",
                 Component: Save
+            },
+            {
+                path: "/profil",
+                Component: Profil
             }
         ]
     },

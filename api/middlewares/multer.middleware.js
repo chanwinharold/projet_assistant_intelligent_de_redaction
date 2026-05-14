@@ -1,4 +1,5 @@
 const multer = require("multer")
+const path = require("path");
 
 const MIME_TYPES = {
     'image/jpeg': 'jpeg',
@@ -11,13 +12,12 @@ const MIME_TYPES = {
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, '../../client/public/user_images')
+        cb(null, path.join(__dirname, '../../client/public/user_images'))
     },
     filename: (req, file, cb) => {
-        const extension = MIME_TYPES[file.mimetype]
-        const uniquePrefix = 'image-user-' + req.body.username || 'unknown'
-        const uniqueSuffix = 'upload-time-' + Date.now()
-        cb(null, uniquePrefix + uniqueSuffix + '.' + extension)
+        const extension = MIME_TYPES[file.mimetype];
+        const filename = `user-${Date.now()}-image.${extension}`;
+        cb(null, filename);
     }
 })
 

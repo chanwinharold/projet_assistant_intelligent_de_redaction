@@ -7,6 +7,6 @@
     font-family: var(--ff-regular), Inter, sans-serif !important;
 }
 
-#root {
+nav + main {
     min-height: 75vh;
 }

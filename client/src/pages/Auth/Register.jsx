@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Upload } from 'lucide-react';
-import { apiRequest } from '../../services/api.js';
+import {apiRequest, apiUpload} from '../../services/api.js';
 import { CheckCircle2 } from 'lucide-react';
 import "../../styles/Register.css";
 
@@ -26,8 +26,21 @@ const Register = () => {
     };
 
     // Gestion du chargement de l'image
-    const handleImageChange = (e) => {
-        setImage(e.target.files[0]);
+    const handleImageChange = async (e) => {
+        try {
+
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const form = new FormData();
+            form.append("image", file)
+
+            const res = await apiUpload("/auth/image", form)
+            setImage(res)
+
+        } catch (err) {
+            console.error(err)
+        }
     };
 
 
@@ -49,6 +62,7 @@ const Register = () => {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(payload),
+                credentials: "include"
             });
 
             navigate('/login');

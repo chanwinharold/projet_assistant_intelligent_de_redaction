@@ -2,12 +2,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { apiRequest } from '../../services/api.js';
 import "../../styles/Login.css"
+import useAuth from "../../hooks/useAuth.js";
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const {login} = useAuth();
 
     const navigate = useNavigate();
 
@@ -20,15 +22,14 @@ const Login = () => {
             // Le contrôleur attend du JSON avec 'username' et 'password'
             const response = await apiRequest('/auth/login', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: {'Content-Type': 'application/json'},
                 credentials: "include",
                 body: JSON.stringify({ username, password }),
             });
 
             // Le backend renvoie { message: "Connexion réussie." } et un cookie
-            console.log(response);
+            console.log(response.message);
+            login(response.data)
 
             // Redirection vers l'accueil
             navigate('/write');

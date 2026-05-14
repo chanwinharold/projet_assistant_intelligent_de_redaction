@@ -13,7 +13,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 5%;
+    padding: 2rem 5%;
     height: 20px;
 }
 
@@ -79,11 +79,18 @@
 }
 
 .profile-circle {
+    display: inline-block;
     width: 45px;
     height: 45px;
     border-radius: 50%;
     border: 1px solid #ddd;
     overflow: hidden;
+}
+.profile-circle img {
+    display: block;
+    max-width: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .mobile-menu-button {
