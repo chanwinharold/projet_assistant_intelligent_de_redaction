@@ -1,0 +1,45 @@
+
+
+.main__container {
+    display: grid;
+    gap: 6rem;
+}
+.section__container {
+    display: grid;
+    gap: 1rem;
+}
+
+.articles__wrapper {
+    display: flex; gap: 3rem;
+    flex-flow: row wrap;
+}
+
+.articles__header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.articles__header h2 {
+    font-family: var(--ff-title), sans-serif;
+    font-size: 28px;
+}
+.articles__header svg {
+    cursor: pointer;
+}
+
+
+.article__container {
+    display: grid;
+    gap: 1rem;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 350ms ease-out;
+    &:hover {
+        transform: scale(110%) rotate(2deg);
+    }
+}
+a:has(.article__container) {
+    text-decoration: none;
+    color: unset;
+}

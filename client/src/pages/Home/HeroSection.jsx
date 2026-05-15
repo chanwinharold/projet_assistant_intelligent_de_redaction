@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
 import "../../styles/Home.css";
+import useAuth from "../../hooks/useAuth.js";
 
 const HeroSection = () => {
+    const {isLoggedIn} = useAuth();
+
     return (
         <section className="hero-container">
             <div className="hero-content">
@@ -20,11 +23,11 @@ const HeroSection = () => {
                 {/* BOUTON AVEC L'ICÔNE FLÈCHE CERCLÉE DU DESIGN */}
                 <button className="hero-button">
                     <span>
-                      <Link to="/register" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <Link to={isLoggedIn ? "/write" : "/register"} style={{ textDecoration: 'none', color: 'inherit' }}>
                         LANCEZ VOUS !
                       </Link>
                     </span>
-                    <Link to="/register" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Link to={isLoggedIn ? "/write" : "/register"} style={{ textDecoration: 'none', color: 'inherit' }}>
                         <div className="arrow-circle">
                             <svg
                                 viewBox="0 0 24 24"

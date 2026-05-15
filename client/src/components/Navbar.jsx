@@ -27,13 +27,17 @@ const Navbar = () => {
                 </div>
 
                 {/* LIENS DESKTOP */}
-                <div className="nav-links-desktop">
-                    {navLinks.map((link) => (
-                        <a key={link.name} href={link.href} className="nav-item">
-                            {link.name}
-                        </a>
-                    ))}
-                </div>
+                {
+                    isLoggedIn && (
+                        <div className="nav-links-desktop">
+                            {navLinks.map((link) => (
+                                <a key={link.name} href={link.href} className="nav-item">
+                                    {link.name}
+                                </a>
+                            ))}
+                        </div>
+                    )
+                }
 
                 {/* AUTH / PROFIL GAUCHE */}
                 <div className="auth-section-desktop">
