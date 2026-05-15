@@ -1,17 +1,18 @@
 import "../../styles/Write.css";
 import Editor from "./Editor.jsx";
 import GlimpseEditor from "./GlimpseEditor.jsx";
-import useAuthRedirection from "../../hooks/useAuthRedirection.js";
+import useAuth from "../../hooks/useAuth.js";
+import Unauthorize from "../../components/Unauthorize.jsx";
 
 function Write() {
-    useAuthRedirection();
+    const {isLoggedIn} = useAuth();
 
-    return (
+    return isLoggedIn ? (
         <main className={"main__container"}>
             <Editor />
             <GlimpseEditor title={null} content={null} />
         </main>
-    );
+    ) : <Unauthorize />
 }
 
 export default Write;

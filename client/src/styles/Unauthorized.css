@@ -1,0 +1,14 @@
+
+.unauthorized__wrapper {
+    background-color: #F1F1F1;
+    border: 1px solid black;
+    border-radius: var(--radius-lg);
+    width: min(300px, 100%);
+    margin: auto;
+    padding: 1.5rem;
+    text-align: center;
+}
+.unauthorized__wrapper h1 {
+    font-size: 28px;
+    font-family: var(--ff-title), sans-serif;
+}

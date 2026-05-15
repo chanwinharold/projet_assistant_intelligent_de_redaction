@@ -3,10 +3,11 @@ import imgResumeUrl from "../../assets/images/image_resume.png";
 import imgArticleUrl from "../../assets/images/image_article.png";
 import {ArrowDown} from "../../assets/icons/ArrowDown.jsx";
 import {Link} from "react-router-dom";
-import useAuthRedirection from "../../hooks/useAuthRedirection.js";
+import useAuth from "../../hooks/useAuth.js";
+import Unauthorize from "../../components/Unauthorize.jsx";
 
 function Save() {
-    useAuthRedirection();
+    const {isLoggedIn} = useAuth();
 
     const Articles = [
         {
@@ -53,7 +54,7 @@ function Save() {
         }
     ]
 
-    return (
+    return isLoggedIn ? (
         <main className={"main__container"}>
             <section className={"section__container"}>
                 <header className={"articles__header"}>
@@ -78,7 +79,7 @@ function Save() {
                 </div>
             </section>
         </main>
-    );
+    ) : <Unauthorize />
 }
 
 export default Save;
