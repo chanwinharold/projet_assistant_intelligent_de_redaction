@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS ir_user;
 CREATE TABLE IF NOT EXISTS ir_user (
     id_user SERIAL PRIMARY KEY,
     user_name VARCHAR(20) NOT NULL UNIQUE,
@@ -9,8 +10,11 @@ CREATE TABLE IF NOT EXISTS ir_user (
     user_verified BOOLEAN NOT NULL DEFAULT true
 );
 
+DROP TABLE IF EXISTS ir_email_token;
 CREATE TABLE IF NOT EXISTS ir_email_token (
-    id_token SERIAL PRIMARY KEY,
-    token VARCHAR(255) NOT NULL UNIQUE,
-    expires TIMESTAMPTZ NOT NULL
+    id_token    SERIAL PRIMARY KEY,
+    token       VARCHAR(255) NOT NULL UNIQUE,
+    expires     TIMESTAMPTZ NOT NULL,
+    id_user     INTEGER NOT NULL REFERENCES ir_user(id_user) ON DELETE CASCADE,
+    token_type  VARCHAR(50) NOT NULL
 );
