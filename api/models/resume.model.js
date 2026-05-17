@@ -4,7 +4,8 @@ const db = require("../database")
 exports.createResume = async (resume_dt, id_user) => {
     return db`
         INSERT INTO ir_resume (title, content, id_user)
-        VALUES (${resume_dt.title}, ${resume_dt.content}, ${id_user});
+        VALUES (${resume_dt.title}, ${resume_dt.content}, ${id_user})
+        RETURNING id_resume, title, content, created_at
     `
 };
 

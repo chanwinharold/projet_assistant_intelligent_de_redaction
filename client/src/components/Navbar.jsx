@@ -3,10 +3,11 @@ import React, {useState} from 'react';
 import { Menu, X } from 'lucide-react';
 import "../styles/Navbar.css";
 import useAuth from "../hooks/useAuth.js";
+import { userDisplayName } from "../utils/userDisplay.js";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const {user, isLoggedIn} = useAuth();
+    const { user, isLoggedIn } = useAuth();
 
     const navLinks = [
         { name: 'Écrire', href: '/write' },
@@ -44,7 +45,7 @@ const Navbar = () => {
                     <div className="auth-section-desktop">
                         {isLoggedIn ? (
                             <Link to={"/profil"} className="profile-circle">
-                                <img src={`/user_images/${user.image}`} alt="Profil" title={user.username} />
+                                <img src={`/user_images/${user.image}`} alt="Profil" title={userDisplayName(user)} />
                             </Link>
                         ) : (
                             <Link to="/login" className="login-btn">Se connecter</Link>

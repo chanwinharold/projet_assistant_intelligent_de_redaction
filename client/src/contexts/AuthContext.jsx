@@ -1,33 +1,42 @@
-import {useEffect, useState} from 'react';
-import {AuthContext} from "../hooks/useAuth.js";
-import {apiRequest} from "../services/api.js";
+import { useEffect, useState } from "react";
+import { AuthContext } from "../hooks/useAuth.js";
+import { apiRequest } from "../services/api.js";
 
-export const AuthProvider = ({children} ) => {
+export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [authLoading, setAuthLoading] = useState(true);
 
     useEffect(() => {
-        apiRequest("/auth/me", {
-            method: 'GET',
-            credentials: "include",
-        }
-        ).then(data => {
-            setUser(data)
-            setIsLoggedIn(true);
-        }).catch(err => console.error(err))
+        apiRequest("/auth/me", { method: "GET" })
+            .then((data) => {
+                setUser(data);
+                setIsLoggedIn(true);
+            })
+            .catch(() => {
+                setUser(null);
+                setIsLoggedIn(false);
+            })
+            .finally(() => setAuthLoading(false));
     }, []);
 
     const login = (userData) => {
-        setUser(userData)
-        setIsLoggedIn(true)
+        setUser(userData);
+        setIsLoggedIn(true);
     };
-    const logout = () => {
-        setUser(null)
-        setIsLoggedIn(false)
-    }
+
+    const logout = async () => {
+        try {
+            await apiRequest("/auth/logout", { method: "POST" });
+        } catch {
+            /* ignore */
+        }
+        setUser(null);
+        setIsLoggedIn(false);
+    };
 
     return (
-        <AuthContext.Provider value={{user, isLoggedIn, login, logout}}>
+        <AuthContext.Provider value={{ user, isLoggedIn, authLoading, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

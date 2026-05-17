@@ -40,3 +40,12 @@ nav + main {
         background-color: black;
     }
 }
+
+.app-toast-container {
+    font-family: var(--ff-regular), Inter, sans-serif;
+    z-index: 10000;
+}
+
+.app-toast-container .Toastify__progress-bar {
+    height: 4px;
+}

@@ -51,6 +51,17 @@
     text-transform: uppercase;
 }
 
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.form-row .form-group {
+    margin-bottom: 0;
+}
+
 .form-group {
     text-align: left;
     margin-bottom: 15px;
@@ -108,4 +119,5 @@
 
 @media (max-width: 480px) {
     .auth-card { padding: 20px; border-radius: 25px; border: none; }
+    .form-row { grid-template-columns: 1fr; }
 }

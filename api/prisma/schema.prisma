@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ir_article {
+  id_article Int       @id @default(autoincrement())
+  title      String    @db.VarChar(255)
+  content    String    @db.VarChar(4096)
+  id_user    Int
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  ir_user    ir_user   @relation(fields: [id_user], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model ir_email_token {
+  id_token   Int      @id @default(autoincrement())
+  token      String   @unique @db.VarChar(255)
+  expires    DateTime @db.Timestamptz(6)
+  id_user    Int?
+  token_type String?  @default("verify") @db.VarChar(20)
+  ir_user    ir_user? @relation(fields: [id_user], references: [id_user], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model ir_resume {
+  id_resume  Int       @id @default(autoincrement())
+  title      String    @db.VarChar(255)
+  content    String    @db.VarChar(4096)
+  id_user    Int
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  ir_user    ir_user   @relation(fields: [id_user], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model ir_user {
+  id_user        Int              @id @default(autoincrement())
+  user_name      String           @unique @db.VarChar(20)
+  user_prenom    String?          @db.VarChar(50)
+  user_nom       String?          @db.VarChar(50)
+  user_email     String           @unique @db.VarChar(50)
+  user_password  String           @db.VarChar(255)
+  user_image     String?          @default("user_default_image.png") @db.VarChar(255)
+  user_verified  Boolean          @default(true)
+  ir_article     ir_article[]
+  ir_email_token ir_email_token[]
+  ir_resume      ir_resume[]
+}

@@ -1,42 +1,54 @@
-import { Link, useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
-import { apiRequest } from '../../services/api.js';
-import "../../styles/Login.css"
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { apiRequest } from "../../services/api.js";
 import useAuth from "../../hooks/useAuth.js";
+import { notifyError, notifyInfo, notifySuccess } from "../../services/toast.js";
+import PasswordInput from "../../components/PasswordInput.jsx";
+import "../../styles/Login.css";
 
 const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const location = useLocation();
+    const [email, setEmail] = useState(location.state?.email || "");
+    const [password, setPassword] = useState("");
+    const [needsVerification, setNeedsVerification] = useState(false);
     const [loading, setLoading] = useState(false);
-    const {login} = useAuth();
-
+    const { login } = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (location.state?.message) notifyInfo(location.state.message);
+    }, [location.state?.message]);
+
+    const handleResend = async () => {
+        if (!email) return notifyError("Indiquez votre email.");
+        try {
+            await apiRequest("/auth/resend-verification", {
+                method: "POST",
+                body: JSON.stringify({ email }),
+            });
+            notifySuccess("Email de confirmation renvoyé.");
+        } catch (err) {
+            notifyError(err.message);
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
+        setNeedsVerification(false);
         setLoading(true);
-
         try {
-            // Le contrôleur attend du JSON avec 'username' et 'password'
-            const response = await apiRequest('/auth/login', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                credentials: "include",
-                body: JSON.stringify({ username, password }),
+            const response = await apiRequest("/auth/login", {
+                method: "POST",
+                body: JSON.stringify({ email, password }),
             });
-
-            // Le backend renvoie { message: "Connexion réussie." } et un cookie
-            console.log(response.message);
-            login(response.data)
-
-            // Redirection vers l'accueil
-            navigate('/write');
-
+            login(response.data);
+            notifySuccess("Connexion réussie.");
+            navigate("/write");
         } catch (err) {
-            // Affiche "Votre nom d'utilisateur/mot de passe est incorrecte." ou erreur serveur
-            setError(err.message);
+            notifyError(err.message);
+            setNeedsVerification(
+                err.code === "EMAIL_NOT_VERIFIED" || err.message?.toLowerCase().includes("confirm")
+            );
         } finally {
             setLoading(false);
         }
@@ -51,42 +63,28 @@ const Login = () => {
                     </Link>
                     <h1 className="auth-title">SE CONNECTER</h1>
                 </div>
-
-                {error && <div className="error-message">{error}</div>}
-
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label>Nom d'utilisateur</label>
-                        <input
-                            type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                        />
+                        <label>Email</label>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
                     </div>
-
                     <div className="form-group">
                         <label>Mot de passe</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
+                        <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
                     </div>
-
-                    <button
-                        type="submit"
-                        className="auth-submit-btn"
-                        disabled={loading}
-                    >
-                        {loading ? 'Connexion...' : 'Se connecter'}
+                    <button type="submit" className="auth-submit-btn" disabled={loading}>
+                        {loading ? "Connexion..." : "Se connecter"}
                     </button>
                 </form>
-
-                <p className="switch-auth">
-                    Pas encore de compte ? <Link to="/register">S'inscrire</Link>
-                </p>
+                {needsVerification && (
+                    <p className="switch-auth">
+                        <button type="button" className="link-btn" onClick={handleResend}>
+                            Renvoyer l&apos;email de confirmation
+                        </button>
+                    </p>
+                )}
+                <p className="switch-auth"><Link to="/forgot-password">Mot de passe oublié ?</Link></p>
+                <p className="switch-auth">Pas encore de compte ? <Link to="/register">S&apos;inscrire</Link></p>
             </div>
         </div>
     );
