@@ -1,9 +1,11 @@
 import os
+from pathlib import Path
 import dotenv
-dotenv.load_dotenv(".env")
 
+_ENV_FILE = Path(__file__).resolve().parent / ".env"
+dotenv.load_dotenv(_ENV_FILE)
 
-HF_TOKEN=os.getenv("HF_TOKEN")
+HF_TOKEN = (os.getenv("HF_TOKEN") or "").strip()
 MODEL_NAME="Qwen/Qwen2.5-7B-Instruct"
 PREPROCESSED_PROMPTS= {
     "suggest_title":

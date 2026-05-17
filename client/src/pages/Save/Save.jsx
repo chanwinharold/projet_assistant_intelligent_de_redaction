@@ -1,109 +1,87 @@
+import { useEffect, useState } from "react";
 import "../../styles/Save.css";
 import imgResumeUrl from "../../assets/images/image_resume.png";
 import imgArticleUrl from "../../assets/images/image_article.png";
-import {ArrowDown} from "../../assets/icons/ArrowDown.jsx";
-import {Link} from "react-router-dom";
+import { ArrowDown } from "../../assets/icons/ArrowDown.jsx";
+import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth.js";
 import Unauthorize from "../../components/Unauthorize.jsx";
+import { articlesApi, resumesApi } from "../../services/contentApi.js";
+import { notifyError } from "../../services/toast.js";
+import { getErrorMessage } from "../../utils/errorMessage.js";
 
 function Save() {
-    const {isLoggedIn} = useAuth();
+    const { isLoggedIn } = useAuth();
+    const [articles, setArticles] = useState([]);
+    const [resumes, setResumes] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const Articles = [
-        {
-            title: "Mon article 1",
-            content: "lorem"
-        },
-        {
-            title: "Mon article 2",
-            content: "lorem"
-        },
-        {
-            title: "Mon article 3",
-            content: "lorem"
-        },
-        {
-            title: "Mon article 4",
-            content: "lorem"
-        },
-        {
-            title: "Mon article 5",
-            content: "lorem"
-        }
-    ]
-    const Resumes = [
-        {
-            title: "Mon résumé 1",
-            content: "lorem"
-        },
-        {
-            title: "Mon résumé 2",
-            content: "lorem"
-        },
-        {
-            title: "Mon résumé 3",
-            content: "lorem"
-        },
-        {
-            title: "Mon résumé 4",
-            content: "lorem"
-        },
-        {
-            title: "Mon résumé 5",
-            content: "lorem"
-        }
-    ]
+    useEffect(() => {
+        if (!isLoggedIn) return;
+        Promise.all([articlesApi.list(), resumesApi.list()])
+            .then(([a, r]) => {
+                setArticles(a.data || []);
+                setResumes(r.data || []);
+            })
+            .catch((err) => notifyError(getErrorMessage(err, "Impossible de charger les enregistrements.")))
+            .finally(() => setLoading(false));
+    }, [isLoggedIn]);
 
-    return isLoggedIn ? (
-        <main className={"main__container"}>
-            <section className={"section__container"}>
-                <header className={"articles__header"}>
+    if (!isLoggedIn) return <Unauthorize />;
+
+    return (
+        <main className="main__container">
+            {loading && <p className="save-loading">Chargement…</p>}
+            <section className="section__container">
+                <header className="articles__header">
                     <h2>Articles</h2>
                     <ArrowDown />
                 </header>
-                <div className={"articles__wrapper"}>
-                    {Articles.map((article, index) => (
-                        <Article key={index} id={index} title={article.title} />
-                    ))}
+                <div className="articles__wrapper">
+                    {articles.length === 0 && !loading ? (
+                        <p className="save-empty">Aucun article. <Link to="/write">Écrire</Link></p>
+                    ) : (
+                        articles.map((article) => (
+                            <ArticleCard key={article.id_article} id={article.id_article} title={article.title} />
+                        ))
+                    )}
                 </div>
             </section>
-            <section  className={"section__container"}>
-                <header className={"articles__header"}>
+            <section className="section__container">
+                <header className="articles__header">
                     <h2>Résumés</h2>
                     <ArrowDown />
                 </header>
-                <div className={"articles__wrapper"}>
-                    {Resumes.map((resume, index) => (
-                        <Resume key={index} id={index} title={resume.title} />
-                    ))}
+                <div className="articles__wrapper">
+                    {resumes.length === 0 && !loading ? (
+                        <p className="save-empty">Aucun résumé. <Link to="/resume">Résumer</Link></p>
+                    ) : (
+                        resumes.map((resume) => (
+                            <ResumeCard key={resume.id_resume} id={resume.id_resume} title={resume.title} />
+                        ))
+                    )}
                 </div>
             </section>
         </main>
-    ) : <Unauthorize />
+    );
 }
 
+const ArticleCard = ({ id, title }) => (
+    <Link to={`/write?id=${id}`}>
+        <article className="article__container">
+            <img src={imgArticleUrl} width={96} alt="article" />
+            <span>{title}</span>
+        </article>
+    </Link>
+);
+
+const ResumeCard = ({ id, title }) => (
+    <Link to={`/resume?id=${id}`}>
+        <article className="article__container">
+            <img src={imgResumeUrl} width={96} alt="résumé" />
+            <span>{title}</span>
+        </article>
+    </Link>
+);
+
 export default Save;
-
-
-const Article = ({id, title}) => {
-
-    return (
-        <Link to={`/write?id=${id}`} >
-            <article className={"article__container"}>
-                <img src={`${imgArticleUrl}`} width={96} alt="article paper"/>
-                <span>{title}</span>
-            </article>
-        </Link>
-    )
-};
-
-const Resume = ({id, title}) => {
-    return (
-        <Link to={`/resume?id=${id}`}>
-            <article className={"article__container"}>
-                <img src={`${imgResumeUrl}`} width={96} alt="summary paper"/>
-                <span>{title}</span>
-            </article>
-        </Link>
-    )
-};

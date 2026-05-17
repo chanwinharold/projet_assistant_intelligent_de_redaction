@@ -4,6 +4,7 @@ exports.createArticle = async (article_dt, id_user) => {
     return db`
         INSERT INTO ir_article (title, content, id_user)
         VALUES (${article_dt.title}, ${article_dt.content}, ${id_user})
+        RETURNING id_article, title, content, created_at
     `
 }
 

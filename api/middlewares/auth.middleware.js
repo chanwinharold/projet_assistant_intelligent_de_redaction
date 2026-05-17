@@ -1,14 +1,17 @@
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
     try {
-        const token = req.cookies?.authToken
-        if (!token) return res.status(401).json({ message: "Non authentifié" });
+        const token = req.cookies?.authToken;
+        if (!token) {
+            return res.status(401).json({ message: "Non authentifié" });
+        }
 
-        const decodedToken = jwt.verify(token, process.env.JWT_USER_AUTH_TOKEN)
-        req.auth = {id_user: decodedToken.id_user}
+        const secret = process.env.JWT_USER_AUTH_TOKEN || process.env.JWT_SECRET;
+        const decodedToken = jwt.verify(token, secret);
+        req.auth = { id_user: decodedToken.id_user };
         next();
-    } catch (err) {
-        throw new Error(err)
+    } catch {
+        return res.status(401).json({ message: "Token invalide" });
     }
-}
+};

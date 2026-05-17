@@ -1,32 +1,29 @@
-
-const GlimpseEditor = ({title, content}) => {
-
+const GlimpseEditor = ({ title, content, mode, suggestions, suggestionType, onPickSuggestion }) => {
     return (
-        <div className={"glimpse"}>
-            <header className={"editor__header"}>
-                <h2>aperçu</h2>
+        <div className="glimpse">
+            <header className="editor__header">
+                <h2>{mode === "suggestions" ? "suggestions IA" : "aperçu"}</h2>
             </header>
-            <section className={"editor__main"}>
-                <strong>{title ? (
-                    title
-                ):(`
-                    Un titre percutant ✨
-                `)}</strong>
-                <p>{content ? (
-                    content
-                ):(`
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
-                    Praesentium quasi, rerum? At ex id illum necessitatibus 
-                    saepe veniam voluptate. Facilis placeat quos reiciendis 
-                    sed soluta? Accusamus hic illo in totam.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
-                    Praesentium quasi, rerum? At ex id illum necessitatibus 
-                    saepe veniam voluptate. Facilis placeat quos reiciendis 
-                    sed soluta? Accusamus hic illo in totam. 
-                `)}</p>
+            <section className="editor__main">
+                {mode === "suggestions" && suggestions?.length > 0 ? (
+                    <ul className="glimpse-suggestions">
+                        {suggestions.map((item, index) => (
+                            <li key={index}>
+                                <button type="button" className="glimpse-suggestion-btn" onClick={() => onPickSuggestion(item, suggestionType)}>
+                                    {item}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <>
+                        <strong>{title || "Un titre percutant ✨"}</strong>
+                        <p>{content || "Votre article apparaîtra ici…"}</p>
+                    </>
+                )}
             </section>
         </div>
-    )
-}
+    );
+};
 
 export default GlimpseEditor;

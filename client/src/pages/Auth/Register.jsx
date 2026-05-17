@@ -1,73 +1,62 @@
-import { Link, useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
-import { Upload } from 'lucide-react';
-import {apiRequest, apiUpload} from '../../services/api.js';
-import { CheckCircle2 } from 'lucide-react';
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { apiRequest } from "../../services/api.js";
+import useAuth from "../../hooks/useAuth.js";
+import { notifyError, notifyInfo } from "../../services/toast.js";
+import PasswordInput from "../../components/PasswordInput.jsx";
 import "../../styles/Register.css";
 
-
 const Register = () => {
-    // États pour les champs du formulaire
-    const [formData, setFormData] = useState({
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-    });
-    const [image, setImage] = useState(null);
-    const [error, setError] = useState('');
+    const [prenom, setPrenom] = useState("");
+    const [nom, setNom] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
-
+    const { login } = useAuth();
     const navigate = useNavigate();
-
-    // Gestion des changements dans les inputs texte
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    // Gestion du chargement de l'image
-    const handleImageChange = async (e) => {
-        try {
-
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const form = new FormData();
-            form.append("image", file)
-
-            const res = await apiUpload("/auth/image", form)
-            setImage(res)
-
-        } catch (err) {
-            console.error(err)
-        }
-    };
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (formData.password !== formData.confirmPassword) return setError('Mots de passe différents');
+
+        if (!prenom.trim() || prenom.trim().length < 2) {
+            notifyError("Le prénom doit contenir au moins 2 caractères.");
+            return;
+        }
+        if (!nom.trim() || nom.trim().length < 2) {
+            notifyError("Le nom doit contenir au moins 2 caractères.");
+            return;
+        }
+        if (password !== confirmPassword) {
+            notifyError("Les mots de passe ne correspondent pas.");
+            return;
+        }
+        if (password.length < 6) {
+            notifyError("Le mot de passe doit contenir au moins 6 caractères.");
+            return;
+        }
 
         setLoading(true);
         try {
-            // On envoie un objet JSON simple pour correspondre à req.body du controller
-            const payload = {
-                username: formData.username,
-                email: formData.email,
-                password: formData.password,
-                image: image
-            };
-
-            await apiRequest('/auth/signup', { // Le controller est lié à /signup et non /register
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(payload),
-                credentials: "include"
+            const response = await apiRequest("/auth/signup", {
+                method: "POST",
+                body: JSON.stringify({
+                    prenom: prenom.trim(),
+                    nom: nom.trim(),
+                    email,
+                    password,
+                }),
             });
 
-            navigate('/login');
+            if (response.data?.isVerified) {
+                login(response.data);
+                navigate("/write");
+            } else {
+                navigate(`/verify?email=${encodeURIComponent(email)}`, { replace: true });
+                notifyInfo(response.message, "register-verify-info");
+            }
         } catch (err) {
-            setError(err.message);
+            notifyError(err.message);
         } finally {
             setLoading(false);
         }
@@ -80,86 +69,52 @@ const Register = () => {
                     <Link to="/" className="logo-link">
                         <img src="/images/logo.png" alt="Logo" className="logo-img" />
                     </Link>
-                    <h1 className="auth-title">S'INSCRIRE</h1>
+                    <h1 className="auth-title">S&apos;INSCRIRE</h1>
                 </div>
-
-                {error && <div className="error-message">{error}</div>}
-
                 <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label>Nom d'utilisateur</label>
-                        <input
-                            type="text"
-                            name="username"
-                            value={formData.username}
-                            onChange={handleChange}
-                            required
-                        />
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label>Prénom</label>
+                            <input
+                                type="text"
+                                value={prenom}
+                                onChange={(e) => setPrenom(e.target.value)}
+                                autoComplete="given-name"
+                                required
+                                minLength={2}
+                                maxLength={50}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Nom</label>
+                            <input
+                                type="text"
+                                value={nom}
+                                onChange={(e) => setNom(e.target.value)}
+                                autoComplete="family-name"
+                                required
+                                minLength={2}
+                                maxLength={50}
+                            />
+                        </div>
                     </div>
-
                     <div className="form-group">
-                        <label>Email d'utilisateur</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
+                        <label>Email</label>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
                     </div>
-
                     <div className="form-group">
                         <label>Mot de passe</label>
-                        <input
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
+                        <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" required minLength={6} />
                     </div>
-
                     <div className="form-group">
                         <label>Confirmer le mot de passe</label>
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            required
-                        />
+                        <PasswordInput value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} autoComplete="new-password" required minLength={6} />
                     </div>
-
-                    <div className="upload-row">
-                        <span style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '8px',
-                              color: image ? '#4f75ff' : 'inherit'
-                        }}>
-                            {image ? (
-                                <><CheckCircle2 size={18} /> Image sélectionnée</>
-                            ) : ("Charger une image")}
-                        </span>
-                        <label className="upload-button">
-                            <Upload size={22} strokeWidth={2.5} />
-                            <input
-                                type="file"
-                                accept="image/*"
-                                style={{ display: 'none' }}
-                                onChange={handleImageChange}
-                            />
-                        </label>
-                    </div>
-
                     <button type="submit" className="auth-submit-btn" disabled={loading}>
-                        {loading ? 'Inscription...' : "S'inscrire"}
+                        {loading ? "Inscription..." : "S'inscrire"}
                     </button>
                 </form>
-
-                <p className="switch-auth">
-                    Déjà un compte ? <Link to="/login">Se connecter</Link>
-                </p>
+                <p className="switch-auth">Déjà un compte ? <Link to="/login">Se connecter</Link></p>
             </div>
         </div>
     );
